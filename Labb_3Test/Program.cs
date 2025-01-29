@@ -1,7 +1,4 @@
-﻿using Labb_3.Models;
-using Labb_3Test;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
+﻿using Labb_3Test;
 
 namespace Labb_3
 {
