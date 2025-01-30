@@ -1,12 +1,12 @@
 ﻿using Labb_3.Models;
 using Microsoft.EntityFrameworkCore;
 using Labb_3.Data;
+using System.Runtime.Intrinsics.X86;
 
 namespace Labb_3
 {
     public static class DataManager
     {
-
         public static List<Student>SortStudents(int sortChoice, int orderChoice)
         {
             using (var context = new FictiveSchoolContext())
@@ -48,50 +48,22 @@ namespace Labb_3
             }
         }
 
-
-        public static void AddStaff()
+        public static List<SchoolRole> NewStaff(string fName, string lName, string ssn, int staffId)
         {
-            using (var context = new FictiveSchoolContext())
+            using(var context = new FictiveSchoolContext())
             {
-
-                Console.WriteLine("Firstname: ");
-                string fNameInput = Console.ReadLine();
-
-                Console.WriteLine("Lastname: ");
-                string lNameInput = Console.ReadLine();
-
-                Console.WriteLine("SSN: ");
-                string ssn = Console.ReadLine();
-
-                Console.WriteLine("What role does this person have: " +
-                    "\n1. Principal\n2. Teacher\n3. " +
-                    "Counsler\n4. School Nurse\n5. Librarian\n6. Janitor" +
-                    "\n7. Cafeteria Lady\n8. Administrator");
-                int staffId = Convert.ToInt32(Console.ReadLine());
-
                 var newStaff = new SchoolRole
                 {
-                    FirstName = fNameInput,
-                    LastName = lNameInput,
+                    FirstName = fName,
+                    LastName = lName,
                     Ssn = ssn,
                     StaffId = staffId
                 };
                 context.SchoolRoles.AddRange(newStaff);
                 context.SaveChanges();
 
-                Console.WriteLine("\nNew staff added.\n");
+                return context.SchoolRoles.ToList();
 
-                var staff = context.StaffRoles
-                    .Include(s => s.SchoolRoles).ToList();
-
-                foreach (var s in staff)
-                {
-                    foreach (var sr in s.SchoolRoles)
-                    {
-                        Console.WriteLine($"{sr.FirstName} {sr.LastName} - {s.RoleType}");
-
-                    }
-                }
             }
         }
     }

@@ -4,6 +4,7 @@ using Labb_3.Data;
 using Labb_3;
 using System.Collections.Generic;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System.Collections;
 
 namespace Labb_3Test
 {
@@ -11,7 +12,6 @@ namespace Labb_3Test
     {
         public static void UserInteraction()
         {
-            
             using (var context = new FictiveSchoolContext())
             {
 
@@ -34,7 +34,7 @@ namespace Labb_3Test
                             break;
 
                         case "3":
-                            DataManager.AddStaff();
+                            AddStaff();
                             Console.Clear();
                             break;
 
@@ -52,7 +52,6 @@ namespace Labb_3Test
                 }
             }
         }
-
         public static void ShowClasses()
         {
             var allClasses = DataManager.GetClasses();
@@ -88,8 +87,8 @@ namespace Labb_3Test
                 "\n1: Ascending\n2: Descending");
             int orderChoice = Convert.ToInt32(Console.ReadLine());
 
-           //have to have these parameters because the exsists in the method 
-           List<Student>sortedStudents =  DataManager.SortStudents(sortChoice, orderChoice);
+            //have to have these parameters because the exsists in the method 
+            List<Student> sortedStudents = DataManager.SortStudents(sortChoice, orderChoice);
 
             // execute the query
             foreach (var student in sortedStudents)
@@ -99,6 +98,43 @@ namespace Labb_3Test
             Console.ReadKey();
             Console.Clear();
 
+        }
+
+        public static void AddStaff()
+        {
+            using (var context = new FictiveSchoolContext())
+            {
+                Console.WriteLine("Firstname: ");
+                string fName = Console.ReadLine();
+
+                Console.WriteLine("Lastname: ");
+                string lName = Console.ReadLine();
+
+                Console.WriteLine("SSN: ");
+                string ssn = Console.ReadLine();
+
+                Console.WriteLine("What role does this person have: " +
+                  "\n1. Principal\n2. Teacher\n3. " +
+                  "Counsler\n4. School Nurse\n5. Librarian\n6. Janitor" +
+                  "\n7. Cafeteria Lady\n8. Administrator");
+                int staffId = Convert.ToInt32(Console.ReadLine());
+
+                List<SchoolRole> GetStudentsByClass = DataManager.NewStaff(fName, lName, ssn, staffId);
+
+                Console.WriteLine("\nNew staff added.\n");
+                var staff = context.StaffRoles
+                .Include(s => s.SchoolRoles).ToList();
+
+                foreach (var s in staff)
+                {
+                    foreach (var sr in s.SchoolRoles)
+                    {
+                        Console.WriteLine($"{sr.FirstName} {sr.LastName} - {s.RoleType}");
+
+                    }
+                }
+
+            }
         }
     }
 }
