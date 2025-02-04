@@ -7,13 +7,13 @@ namespace Labb_3
 {
     public static class DataManager
     {
-        public static List<Student>SortStudents(int sortChoice, int orderChoice)
+        public static List<Student> SortStudents(int sortChoice, int orderChoice)
         {
             using (var context = new FictiveSchoolContext())
             {
                 var studentsQuery = context.Students.AsQueryable();
 
-                if (sortChoice == 1) 
+                if (sortChoice == 1)
                 {
                     studentsQuery = orderChoice == 1
                         ? studentsQuery.OrderBy(s => s.Firstname)
@@ -48,9 +48,9 @@ namespace Labb_3
             }
         }
 
-        public static List<SchoolRole> NewStaff(string fName, string lName, string ssn, int staffId)
+        public static void NewStaff(string fName, string lName, string ssn, int staffId)
         {
-            using(var context = new FictiveSchoolContext())
+            using (var context = new FictiveSchoolContext())
             {
                 var newStaff = new SchoolRole
                 {
@@ -62,8 +62,14 @@ namespace Labb_3
                 context.SchoolRoles.AddRange(newStaff);
                 context.SaveChanges();
 
-                return context.SchoolRoles.ToList();
+            }
+        }
 
+        public static List<SchoolRole> GetAllStaff()
+        {
+            using (var context = new FictiveSchoolContext())
+            {
+                return  context.SchoolRoles.ToList();
             }
         }
     }
