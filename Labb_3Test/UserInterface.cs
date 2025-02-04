@@ -12,46 +12,42 @@ namespace Labb_3Test
     {
         public static void UserInteraction()
         {
-            using (var context = new FictiveSchoolContext())
+            while (true)
             {
-
-                while (true)
+                Console.WriteLine("Here is the menu from the database\n");
+                Console.WriteLine("1: Students\n2: Classes\n3: Add staff\n4: Exit");
+                string userInput = Console.ReadLine();
+                Console.Clear();
+                switch (userInput)
                 {
-                    Console.WriteLine("Here is the menu from the database\n");
-                    Console.WriteLine("1: Students\n2: Classes\n3: Add staff\n4: Exit");
-                    string userInput = Console.ReadLine();
-                    Console.Clear();
-                    switch (userInput)
-                    {
-                        case "1":
-                            ShowStudents();
-                            Console.Clear();
-                            break;
+                    case "1":
+                        ShowStudents();
+                        Console.Clear();
+                        break;
 
-                        case "2":
-                            ShowClasses();
-                            Console.Clear();
-                            break;
+                    case "2":
+                        ShowClasses();
+                        Console.Clear();
+                        break;
 
-                        case "3":
-                            AddStaff();
-                            Console.Clear();
-                            break;
+                    case "3":
+                        AddStaff();
+                        break;
 
-                        case "4":
-                            Console.WriteLine("Exiting");
-                            Console.Clear();
-                            return;
+                    case "4":
+                        Console.WriteLine("Exiting");
+                        Console.Clear();
+                        return;
 
-                        default:
-                            Console.WriteLine("Something went wrong.\nPress enter to return ");
-                            Console.ReadKey();
-                            Console.Clear();
-                            break;
-                    }
+                    default:
+                        Console.WriteLine("Something went wrong.\nPress enter to return ");
+                        Console.ReadKey();
+                        Console.Clear();
+                        break;
                 }
             }
         }
+
         public static void ShowClasses()
         {
             var allClasses = DataManager.GetClasses();
@@ -104,6 +100,11 @@ namespace Labb_3Test
         {
             using (var context = new FictiveSchoolContext())
             {
+                var staff = DataManager.GetAllStaff();
+                foreach (var s in staff)
+                {
+                    Console.WriteLine($"{s.FirstName} {s.LastName} - {s.Staff}");
+                }
                 Console.WriteLine("Firstname: ");
                 string fName = Console.ReadLine();
 
@@ -119,20 +120,10 @@ namespace Labb_3Test
                   "\n7. Cafeteria Lady\n8. Administrator");
                 int staffId = Convert.ToInt32(Console.ReadLine());
 
-                List<SchoolRole> GetStudentsByClass = DataManager.NewStaff(fName, lName, ssn, staffId);
+                DataManager.NewStaff(fName, lName, ssn, staffId);
 
                 Console.WriteLine("\nNew staff added.\n");
-                var staff = context.StaffRoles
-                .Include(s => s.SchoolRoles).ToList();
 
-                foreach (var s in staff)
-                {
-                    foreach (var sr in s.SchoolRoles)
-                    {
-                        Console.WriteLine($"{sr.FirstName} {sr.LastName} - {s.RoleType}");
-
-                    }
-                }
 
             }
         }
